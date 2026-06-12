@@ -118,8 +118,6 @@ void AHwPlayerController::ClientRPCTimerUiUpdate_Implementation()
 		AHwGameStateBase* CXGM = Cast<AHwGameStateBase>(GS);
 		if (IsValid(CXGM) == true)
 		{
-			
-			//블루프린트 위젯 편집기 계층 구조(Hierarchy)에 있는 텍스트 상자의 '이름'을 정확히 적어줍니다.
 			if (UTextBlock* FoundTextBlock = Cast<UTextBlock>(TimerTextWidgetInstance->GetWidgetFromName(TEXT("Timer"))))
 			{
 				FString NewString = FString::Printf(TEXT("Time : %d"), CXGM->RemainingTime);

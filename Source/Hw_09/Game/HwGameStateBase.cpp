@@ -7,7 +7,7 @@
 #include "Hw_09/Player/HwPlayerController.h"
 AHwGameStateBase::AHwGameStateBase()
 {
-	RemainingTime = 60; 
+	RemainingTime = 15; 
 }
 
 void AHwGameStateBase::MulticastRPCBroadcastLoginMessage_Implementation(const FString& InNameString)

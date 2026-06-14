@@ -17,7 +17,7 @@ void AHwPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ThisClass, PlayerNameString);
 	DOREPLIFETIME(ThisClass, CurrentGuessCount);
-	DOREPLIFETIME(ThisClass, MaxGuessCount); // Q. MaxGuessCount가 프로퍼티 레플리케이션될 필요가 있을까?
+	DOREPLIFETIME(ThisClass, MaxGuessCount);
 
 }
 

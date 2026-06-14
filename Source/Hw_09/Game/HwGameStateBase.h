@@ -22,7 +22,6 @@ public:
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// [시간 체크] 서버에서 동기화되어 클라이언트 UI가 참조할 남은 시간
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "GameMode|Timer")
 	int32 RemainingTime;
 	

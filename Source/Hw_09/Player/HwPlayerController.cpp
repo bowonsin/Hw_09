@@ -33,23 +33,17 @@ void AHwPlayerController::BeginPlay()
 	
 	SetInputMode(InputModeUIOnly);
 	
-	//ChatInputWidgetClass가 유효한 위젯 클래스인지 확인 
 	if (IsValid(ChatInputWidgetClass) == true)
 	{
-		// ChatInputWidgetClass를 기반으로 실제 위젯 객체를 생성
-		// this 는 위쳇의 소유자 Owner역할을 한다.
 		ChatInputWidgetInstance = CreateWidget<UHwChatInput>(this, ChatInputWidgetClass);
 		
-		// ChatinputWidgetInstance 가 있는지 확인
 		if (IsValid(ChatInputWidgetInstance) == true)
 		{
-			// 생성된 위젯을 화면(Viewport)에 추가한다.
 			ChatInputWidgetInstance->AddToViewport();
 		}
 	}
 	if (IsValid(NotificationTextWidgetClass) == true)
 	{
-		// UI 등록
 		NotificationTextWidgetInstance = CreateWidget<UUserWidget>(this, NotificationTextWidgetClass);
 		if (IsValid(NotificationTextWidgetInstance) == true)
 		{
@@ -59,13 +53,10 @@ void AHwPlayerController::BeginPlay()
 	}
 	if (IsValid(TimerTextWidgetClass) == true)
 	{
-		// UI 등록
 		TimerTextWidgetInstance = CreateWidget<UUserWidget>(this, TimerTextWidgetClass);
 		if (IsValid(TimerTextWidgetInstance) == true)
 		{
-			// 맞으면 출력
 			TimerTextWidgetInstance->AddToViewport();
-			UE_LOG(LogTemp,Warning,TEXT("TimerTextWidgetInstance::AddToViewport()"));
 		}
 	}
 
@@ -74,16 +65,12 @@ void AHwPlayerController::BeginPlay()
 void AHwPlayerController::SetChatMessageString(const FString& InChatMessageString)
 {
 	ChatMessageString = InChatMessageString;
-	//PrintChatMessageString(InChatMessageString);
-	//로컬 플레이어가 소유한 컨트롤러인지 확인합니다.
-	// 이 코드를 실행하는 주체가 해당 컴퓨터가 맞는지 확인 하는 코드 이다.
 	if (IsLocalController() == true)
 	{
 		
 		AHwPlayerState* CXPS = GetPlayerState<AHwPlayerState>();
 		if (IsValid(CXPS) == true)
 		{
-			//FString CombinedMessageString = CXPS->PlayerNameString + TEXT(": ") + InChatMessageString;
 			FString CombinedMessageString = CXPS->GetPlayerInfoString() + TEXT(": ") + InChatMessageString;
 
 			ServerRPCPrintChatMessageString(CombinedMessageString);
@@ -93,15 +80,9 @@ void AHwPlayerController::SetChatMessageString(const FString& InChatMessageStrin
 
 void AHwPlayerController::PrintChatMessageString(const FString& InChatMessageString)
 {
-	//언리얼의 디버그 출력 함수인 PrintString()을 이용해서 화면과 로그에 문자열을 출력합니다.
-	// 5초간 출력합니다.
-	// Player 1과 Player2 this가 다르기 때문에 
-	//UKismetSystemLibrary::PrintString(this, ChatMessageString, true, true, FLinearColor::Red, 5.0f);
-	
-	//FString NetModeString = ChatXFunctionLibrary::GetNetModeString(this);
-	//FString CombinedMessageString = FString::Printf(TEXT("%s: %s"), *NetModeString, *InChatMessageString);
-	//ChatXFunctionLibrary::MyPrintString(this, CombinedMessageString, 10.f);
-	
+
+	if (IsLocalController() == false)
+		return;
 	ChatXFunctionLibrary::MyPrintString(this, InChatMessageString, 10.f);
 
 }
@@ -135,7 +116,6 @@ void AHwPlayerController::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ThisClass, NotificationText);
-	UE_LOG(LogTemp,Warning,TEXT("Player NotificationText::NotificationText()"));
 }
 
 void AHwPlayerController::ClientRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
@@ -146,15 +126,6 @@ void AHwPlayerController::ClientRPCPrintChatMessageString_Implementation(const F
 
 void AHwPlayerController::ServerRPCPrintChatMessageString_Implementation(const FString& InChatMessageString)
 {
-	// for (TActorIterator<ACXPlayerController> It(GetWorld()); It; ++It)
-	// {
-	// 	ACXPlayerController* CXPlayerController = *It;
-	// 	if (IsValid(CXPlayerController) == true)
-	// 	{
-	// 		CXPlayerController->ClientRPCPrintChatMessageString(InChatMessageString);
-	// 	}
-	// }
-
 	AGameModeBase* GM = UGameplayStatics::GetGameMode(this);
 	if (IsValid(GM) == true)
 	{
